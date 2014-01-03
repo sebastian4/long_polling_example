@@ -12,12 +12,14 @@
 		var client = new function() {
 			var _poll = function() {
 				$.get('/jsupdate', function(response) {
+					console.log("jsupdate");
 					$('textarea').text(response);
 					_poll();
 				});
 			}
 			
 			$.get('/jsstatus', function(response) {
+				console.log("jsstatus");
 				$('textarea').text(response);
 				_poll();
 			});

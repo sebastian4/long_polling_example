@@ -4,6 +4,7 @@ var http = require('http');
 var fs = require('fs');
 
 var TestApp = function() {
+	
 	var _self = this;
 	var counter = 0;
 	
@@ -54,6 +55,7 @@ var TestApp = function() {
 	};
 
 	var _requestHandler = function(request, response) {
+		console.log("new request");
 		sys.puts('request: \'' + request.url + '\'');
 		
 		if(routes[request.url] === undefined) {
@@ -66,10 +68,12 @@ var TestApp = function() {
 	};
 	
 	var _updateHandler = function(request, socket, head) {
+		console.log("new update");
 		sys.puts('update');
 	};
 
 	var _closeHandler = function() {
+		console.log("new close");
 		sys.puts('close');
 	};
 	

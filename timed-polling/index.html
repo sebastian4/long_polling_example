@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>Timed polling test</title>
+	</head>
+	
+	<body>
+		<p>Timed polling test.</p>
+		<p><textarea id="output"></textarea></p>
+	</body>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript">
+	
+	var client = new function() {
+		
+		var pollLapse = 2000;
+		var pollStop = 30000;
+		
+		var pIndex = 0;
+		
+		var timedPoll = setInterval( function(){timedPollCall()}, pollLapse);
+
+		function timedPollCall() {
+			
+			pIndex++;
+			if ((pIndex*pollLapse) > pollStop) { stopTimedPollCall(); };
+			
+			$.ajax({
+		        url: "/jsstatus",
+		        type: "get",
+		        dataType: "application/json",
+		        success: function(response){
+		        	console.log("ajax success, time passed = "+ (pIndex*pollLapse) );
+		        	var result = JSON.parse(response);
+		        	if (checkToStop(result)) { stopTimedPollCall(); };
+					$('textarea').text(response);
+				},
+		        error:function(response){
+		        	console.log("ajax error");
+					$('textarea').text(response);
+		        }
+		      });
+		}
+		
+		function checkToStop(result) {
+			return (result.counter > 0);
+		}
+		
+		function stopTimedPollCall() {
+			clearInterval(timedPoll);
+		}
+	}
+		
+	</script>
+</html>
